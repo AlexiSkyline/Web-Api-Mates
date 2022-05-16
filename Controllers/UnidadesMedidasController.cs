@@ -53,5 +53,12 @@ public class UnidadesMedidasController : ControllerBase {
 
         return Ok( peticion );
     }
+
+    [HttpGet("ListarFiltradaUnidadMedida/{descripcion}")]
+    public async Task<IActionResult> ListarFiltradaUnidadMedida( string descripcion ) {
+        var peticion = await BLAdminU.ListarFiltrada( descripcion );
+
+        return Ok( peticion );
+    }
     #endregion
 }
