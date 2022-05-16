@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Unach.Inventario.API.Model.Request;
 
 namespace Unach.Inventario.API.Controllers;
 
@@ -22,9 +23,9 @@ public class UnidadesMedidasController : ControllerBase {
         return Ok( peticion );
     }
 
-    [HttpPut("ActualizarUnidadMedida")]
-    public async Task<IActionResult> ActualizarUnidadMedida( Model.Request.UnidadMedidaRequest unidad ) {
-        var peticion = await BLAdminU.ActualizarUnidadMedida( unidad );
+    [HttpPut("ActualizarUnidadMedida/{id}")]
+    public async Task<IActionResult> ActualizarUnidadMedida( Guid id, UnidadMedidaRequest unidad ) {
+        var peticion = await BLAdminU.ActualizarUnidadMedida( id, unidad );
 
         if( peticion.Exito == false ) {
             var mensaje = new { peticion.Mensaje };
@@ -34,9 +35,9 @@ public class UnidadesMedidasController : ControllerBase {
         return Ok( peticion );
     }
     
-    [HttpDelete("EliminarUnidadMedida")]
-    public async Task<IActionResult> EliminarUnidadMedida( Model.Request.UnidadMedidaRequest unidad ) {
-        var peticion = await BLAdminU.EliminarUnidadMedida( unidad );
+    [HttpDelete("EliminarUnidadMedida/{id}")]
+    public async Task<IActionResult> EliminarUnidadMedida( Guid id ) {
+        var peticion = await BLAdminU.EliminarUnidadMedida( id );
 
         if( peticion.Exito == false ) {
             var mensaje = new { peticion.Mensaje };

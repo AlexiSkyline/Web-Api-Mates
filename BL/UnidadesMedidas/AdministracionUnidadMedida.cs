@@ -1,12 +1,14 @@
 using System.Data;
 using Microsoft.Data.SqlClient;
 using Unach.Inventario.API.Helpers;
+using Unach.Inventario.API.Model.Request;
+using Unach.Inventario.API.Model.Response;
+using Unach.Inventario.API.Model;
 
 namespace Unach.Inventario.API.BL.UnidadesMedidas {
     public class AdministracionUnidadMedida {
-        // * En este sitio va toda la configuración de la base de datos
-        public async Task<Model.Response.UnidadMedidaResponse> AgregarUnidadMedida( Model.Request.UnidadMedidaRequest unidadMedidaRequest ) {
-            Model.Response.UnidadMedidaResponse resultado = new Model.Response.UnidadMedidaResponse();
+        public async Task<UnidadMedidaResponse> AgregarUnidadMedida( UnidadMedidaRequest unidadMedidaRequest ) {
+            UnidadMedidaResponse resultado = new UnidadMedidaResponse();
 
             if( unidadMedidaRequest.Descripcion != null ) {
                 using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
@@ -40,7 +42,7 @@ namespace Unach.Inventario.API.BL.UnidadesMedidas {
                     var lectura = await comando.ExecuteReaderAsync();
 
                     while( lectura.Read() ) {
-                        resultado.Id          = lectura.GetInt32( "Id" );  
+                        resultado.Id          = lectura.GetGuid( "Id" );  
                         resultado.Descripcion = lectura.GetString( "Descripcion" );                
                     }
 
@@ -56,10 +58,10 @@ namespace Unach.Inventario.API.BL.UnidadesMedidas {
             return resultado;
         }
 
-        public async Task<Model.Response.UnidadMedidaResponse> ActualizarUnidadMedida( Model.Request.UnidadMedidaRequest unidadMedidaRequest ) {
-            Model.Response.UnidadMedidaResponse resultado = new Model.Response.UnidadMedidaResponse();
+        public async Task<UnidadMedidaResponse> ActualizarUnidadMedida( Guid? id, UnidadMedidaRequest body ) {
+            UnidadMedidaResponse resultado = new UnidadMedidaResponse();
 
-            if( unidadMedidaRequest.Descripcion != null ) {
+            if( id != null && body.Descripcion != null ) {
                 using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
                     conexion.Open();
 
@@ -69,8 +71,8 @@ namespace Unach.Inventario.API.BL.UnidadesMedidas {
                         CommandType = CommandType.StoredProcedure
                     };
                     
-                    comando.Parameters.AddWithValue( "@Id", unidadMedidaRequest.Id );
-                    comando.Parameters.AddWithValue( "@Descripcion", unidadMedidaRequest.Descripcion );
+                    comando.Parameters.AddWithValue( "@Id", id );
+                    comando.Parameters.AddWithValue( "@Descripcion", body.Descripcion );
                     comando.Parameters.AddWithValue( "@Opcion", "Actualizar" );
 
                     SqlParameter exito  = new SqlParameter();
@@ -90,22 +92,27 @@ namespace Unach.Inventario.API.BL.UnidadesMedidas {
 
                     var lectura = await comando.ExecuteReaderAsync();
 
+                    while( lectura.Read() ) {
+                        resultado.Id          = lectura.GetGuid( "Id" );  
+                        resultado.Descripcion = lectura.GetString( "Descripcion" );                
+                    }
+
                     conexion.Close();
                     resultado.Exito   = (bool) exito.Value; 
                     resultado.Mensaje = (string) mensaje.Value; 
                 }
             } else {
                 resultado.Exito   = false;
-                resultado.Mensaje = "Ingresar la Descripción de la Unidad de Medida";
+                resultado.Mensaje = "El ID y la Descripción son obligatorios";
             }
 
             return resultado;
         }
 
-        public async Task<Model.Response.UnidadMedidaResponse> EliminarUnidadMedida( Model.Request.UnidadMedidaRequest unidadMedidaRequest ) {
-            Model.Response.UnidadMedidaResponse resultado = new Model.Response.UnidadMedidaResponse();
+        public async Task<UnidadMedidaResponse> EliminarUnidadMedida( Guid? id ) {
+            UnidadMedidaResponse resultado = new UnidadMedidaResponse();
 
-            if( unidadMedidaRequest.Descripcion != null ) {
+            if( id != null ) {
                 using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
                     conexion.Open();
 
@@ -115,7 +122,7 @@ namespace Unach.Inventario.API.BL.UnidadesMedidas {
                         CommandType = CommandType.StoredProcedure
                     };
                     
-                    comando.Parameters.AddWithValue( "@Id", unidadMedidaRequest.Id );
+                    comando.Parameters.AddWithValue( "@Id", id );
                     comando.Parameters.AddWithValue( "@Opcion", "Eliminar" );
 
                     SqlParameter exito  = new SqlParameter();
@@ -135,20 +142,25 @@ namespace Unach.Inventario.API.BL.UnidadesMedidas {
 
                     var lectura = await comando.ExecuteReaderAsync();
 
+                    while( lectura.Read() ) {
+                        resultado.Id          = lectura.GetGuid( "Id" );  
+                        resultado.Descripcion = lectura.GetString( "Descripcion" );                
+                    }
+
                     conexion.Close();
                     resultado.Exito   = (bool) exito.Value; 
                     resultado.Mensaje = (string) mensaje.Value; 
                 }
             } else {
                 resultado.Exito   = false;
-                resultado.Mensaje = "Ingresar la Descripción de la Unidad de Medida";
+                resultado.Mensaje = "El ID es obligatorio";
             }
 
             return resultado;
         }
     
-        public async Task<List<Model.Response.UnidadMedidaResponse>> ListarUnidadMedida() {
-            List<Model.Response.UnidadMedidaResponse> resultado = new List<Model.Response.UnidadMedidaResponse>();
+        public async Task<List<UnidadMedidaResponse>> ListarUnidadMedida() {
+            List<UnidadMedidaResponse> resultado = new List<UnidadMedidaResponse>();
 
             using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
                 conexion.Open();
@@ -180,8 +192,10 @@ namespace Unach.Inventario.API.BL.UnidadesMedidas {
 
                 while( lectura.Read() ) {
                     resultado.Add( new(){
-                        Id          = lectura.GetInt32( "Id" ),
-                        Descripcion = lectura.GetString( "Descripcion" )
+                        Id          = lectura.GetGuid( "Id" ),
+                        Descripcion = lectura.GetString( "Descripcion" ),
+                        Mensaje     = "Listado exitoso",
+                        Exito       = true
                     });
                 }
 
