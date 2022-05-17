@@ -24,5 +24,10 @@ public class MarcasController : ControllerBase {
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
     
+    [HttpDelete("EliminarMarca/{id}")]
+    public async Task<IActionResult> EliminarMarca( Guid id ) {
+        var peticion = await BLMarcaAdmin.EliminarMarcas( id );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
     #endregion
 }

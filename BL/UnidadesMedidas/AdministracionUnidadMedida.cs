@@ -15,7 +15,7 @@ public class AdministracionUnidadMedida {
 
                 var comando = new SqlCommand {
                     Connection  = conexion,
-                    CommandText = "[dbo].[AdministracionUnidadesMedidas]",
+                    CommandText = "[dbo].[AdminUnidadesMedidas]",
                     CommandType = CommandType.StoredProcedure
                 };
                 
@@ -66,7 +66,7 @@ public class AdministracionUnidadMedida {
 
                 var comando = new SqlCommand {
                     Connection = conexion,
-                    CommandText = "[dbo].[AdministracionUnidadesMedidas]",
+                    CommandText = "[dbo].[AdminUnidadesMedidas]",
                     CommandType = CommandType.StoredProcedure
                 };
                 
@@ -102,7 +102,7 @@ public class AdministracionUnidadMedida {
             }
         } else {
             resultado.Exito = false;
-            resultado.Mensaje = "El ID y la Descripción son obligatorios";
+            resultado.Mensaje = "El ID y la Descripción son requeridos";
         }
 
         return resultado;
@@ -117,7 +117,7 @@ public class AdministracionUnidadMedida {
 
                 var comando = new SqlCommand {
                     Connection = conexion,
-                    CommandText = "[dbo].[AdministracionUnidadesMedidas]",
+                    CommandText = "[dbo].[AdminUnidadesMedidas]",
                     CommandType = CommandType.StoredProcedure
                 };
                 
@@ -152,7 +152,7 @@ public class AdministracionUnidadMedida {
             }
         } else {
             resultado.Exito = false;
-            resultado.Mensaje = "El ID es obligatorio";
+            resultado.Mensaje = "El ID es requerido";
         }
 
         return resultado;
@@ -166,7 +166,7 @@ public class AdministracionUnidadMedida {
 
             var comando = new SqlCommand {
                 Connection = conexion,
-                CommandText = "[dbo].[AdministracionUnidadesMedidas]",
+                CommandText = "[dbo].[AdminUnidadesMedidas]",
                 CommandType = CommandType.StoredProcedure
             };
             
@@ -212,7 +212,7 @@ public class AdministracionUnidadMedida {
 
             var comando = new SqlCommand {
                 Connection = conexion,
-                CommandText = "[dbo].[AdministracionUnidadesMedidas]",
+                CommandText = "[dbo].[AdminUnidadesMedidas]",
                 CommandType = CommandType.StoredProcedure
             };
             
