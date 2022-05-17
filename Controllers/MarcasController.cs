@@ -15,13 +15,14 @@ public class MarcasController : ControllerBase {
     [HttpPost("InsertarMarca")]
     public async Task<IActionResult> InsertarMarca( MarcasRequest marca ) {
         var peticion = await BLMarcaAdmin.AgregarMarca( marca );
-
-        if( peticion.Exito == false ) {
-            var mensaje = new { peticion.Mensaje };
-            return Ok(  mensaje );
-        }
-
-        return Ok( peticion );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
+
+    [HttpPut("ActualizarMarca/{id}")]
+    public async Task<IActionResult> ActualizarMarca( Guid id, MarcasRequest marca ) {
+        var peticion = await BLMarcaAdmin.ActualizarMarcas( id, marca );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
+    
     #endregion
 }

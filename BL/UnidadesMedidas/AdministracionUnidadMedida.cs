@@ -51,7 +51,7 @@ public class AdministracionUnidadMedida {
             }
         } else {
             resultado.Exito = false;
-            resultado.Mensaje = "Ingresar la Descripción de la Unidad de Medida";
+            resultado.Mensaje = "La descripción es requerida";
         }
 
         return resultado;
