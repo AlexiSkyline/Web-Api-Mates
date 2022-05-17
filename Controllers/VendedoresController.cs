@@ -17,5 +17,10 @@ public class VendedoresController : ControllerBase {
         var peticion = await BLVendedorAdmin.AgregarVendedor( Vendedor );
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
+
+    [HttpGet("ListarVendedores")]
+    public async Task<IActionResult> ListarVendedores() {
+        return Ok( await BLVendedorAdmin.ListarVendedores() );
+    }
     #endregion
 }
