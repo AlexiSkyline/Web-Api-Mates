@@ -18,6 +18,12 @@ public class VendedoresController : ControllerBase {
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
 
+    [HttpPut("ActualizarVendedor/{id}")]
+    public async Task<IActionResult> ActualizarVededor( Guid id, VendedorRequest Vededor ) {
+        var peticion = await BLVendedorAdmin.ActualizarVendedor( id, Vededor );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
+
     [HttpGet("ListarVendedores")]
     public async Task<IActionResult> ListarVendedores() {
         return Ok( await BLVendedorAdmin.ListarVendedores() );
