@@ -7,6 +7,59 @@ using Unach.Inventario.API.Model.Response;
 namespace Unach.Inventario.API.BL.Empresas;
 
 public class AdministracionEmpresas {
+    public async Task<EmpresaResponse> AgregarEmpresa( EmpresaRequest empresaRequest ) {
+        EmpresaResponse resultado = new EmpresaResponse();
+
+        if( empresaRequest.Nombre != null && empresaRequest.Direccion != null ) {
+            using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+                conexion.Open();
+
+                var comando = new SqlCommand {
+                    Connection = conexion,
+                    CommandText = "[dbo].[AdminEmpresas]",
+                    CommandType = CommandType.StoredProcedure
+                };
+                
+                comando.Parameters.AddWithValue( "@Id", empresaRequest.Id );
+                comando.Parameters.AddWithValue( "@Nombre", empresaRequest.Nombre );
+                comando.Parameters.AddWithValue( "@Direccion", empresaRequest.Direccion );
+                comando.Parameters.AddWithValue( "@Opcion", "Insertar" );
+
+                SqlParameter exito  = new SqlParameter();
+                exito.ParameterName = "@Exito";
+                exito.SqlDbType = System.Data.SqlDbType.Bit;
+                exito.Direction = System.Data.ParameterDirection.Output;
+
+                comando.Parameters.Add( exito );
+
+                SqlParameter mensaje = new SqlParameter();
+                mensaje.ParameterName = "@Mensaje";
+                mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+                mensaje.Direction = System.Data.ParameterDirection.Output;
+                mensaje.Size = 4000;
+
+                comando.Parameters.Add( mensaje );
+
+                var lectura = await comando.ExecuteReaderAsync();
+
+                while( lectura.Read() ) {
+                    resultado.Id = lectura.GetGuid( "Id" );  
+                    resultado.Nombre = lectura.GetString( "Nombre" );                
+                    resultado.Direccion = lectura.GetString( "Direccion" );                
+                }
+
+                conexion.Close();
+                resultado.Exito = (bool) exito.Value; 
+                resultado.Mensaje = (string) mensaje.Value; 
+            }
+        } else {
+            resultado.Exito = false;
+            resultado.Mensaje = "La descripción es requerida";
+        }
+
+        return resultado;
+    }
+
     public async Task<List<EmpresaResponse>> ListarEmpresas() {
         List<EmpresaResponse> resultado = new List<EmpresaResponse>();
 
