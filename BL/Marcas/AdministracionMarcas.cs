@@ -7,7 +7,7 @@ using Unach.Inventario.API.Model.Response;
 namespace Unach.Inventario.API.BL.Marcas;
 
 public class AdministracionMarcas {
-    public async Task<MarcasResponse> AgregarUnidadMedida( MarcasRequest marcasRequest ) {
+    public async Task<MarcasResponse> AgregarMarca( MarcasRequest marcasRequest ) {
         MarcasResponse resultado = new MarcasResponse();
 
         if( marcasRequest.Descripcion != null ) {
@@ -15,7 +15,7 @@ public class AdministracionMarcas {
                 conexion.Open();
 
                 var comando = new SqlCommand {
-                    Connection  = conexion,
+                    Connection = conexion,
                     CommandText = "[dbo].[AdministracionMarcas]",
                     CommandType = CommandType.StoredProcedure
                 };
@@ -26,16 +26,16 @@ public class AdministracionMarcas {
 
                 SqlParameter exito  = new SqlParameter();
                 exito.ParameterName = "@Exito";
-                exito.SqlDbType     = System.Data.SqlDbType.Bit;
-                exito.Direction     = System.Data.ParameterDirection.Output;
+                exito.SqlDbType = System.Data.SqlDbType.Bit;
+                exito.Direction = System.Data.ParameterDirection.Output;
 
                 comando.Parameters.Add( exito );
 
-                SqlParameter mensaje  = new SqlParameter();
+                SqlParameter mensaje = new SqlParameter();
                 mensaje.ParameterName = "@Mensaje";
-                mensaje.SqlDbType     = System.Data.SqlDbType.VarChar;
-                mensaje.Direction     = System.Data.ParameterDirection.Output;
-                mensaje.Size          = 4000;
+                mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+                mensaje.Direction = System.Data.ParameterDirection.Output;
+                mensaje.Size = 4000;
 
                 comando.Parameters.Add( mensaje );
 
