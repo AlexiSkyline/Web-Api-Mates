@@ -24,6 +24,12 @@ public class VendedoresController : ControllerBase {
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
 
+    [HttpDelete("EliminarVendedor/{id}")]
+    public async Task<IActionResult> EliminarVendedor( Guid id ) {
+        var peticion = await BLVendedorAdmin.EliminarVendedor( id );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
+
     [HttpGet("ListarVendedores")]
     public async Task<IActionResult> ListarVendedores() {
         return Ok( await BLVendedorAdmin.ListarVendedores() );
