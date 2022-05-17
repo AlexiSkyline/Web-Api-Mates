@@ -14,51 +14,29 @@ public class UnidadesMedidasController : ControllerBase {
     [HttpPost("InsertarUnidadMedida")]
     public async Task<IActionResult> InsertarUnidadMedida( Model.Request.UnidadMedidaRequest unidad ) {
         var peticion = await BLAdminU.AgregarUnidadMedida( unidad );
-
-        if( peticion.Exito == false ) {
-            var mensaje = new { peticion.Mensaje };
-            return Ok(  mensaje );
-        }
-
-        return Ok( peticion );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
 
     [HttpPut("ActualizarUnidadMedida/{id}")]
     public async Task<IActionResult> ActualizarUnidadMedida( Guid id, UnidadMedidaRequest unidad ) {
         var peticion = await BLAdminU.ActualizarUnidadMedida( id, unidad );
-
-        if( peticion.Exito == false ) {
-            var mensaje = new { peticion.Mensaje };
-            return Ok(  mensaje );
-        }
-
-        return Ok( peticion );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
     
     [HttpDelete("EliminarUnidadMedida/{id}")]
     public async Task<IActionResult> EliminarUnidadMedida( Guid id ) {
         var peticion = await BLAdminU.EliminarUnidadMedida( id );
-
-        if( peticion.Exito == false ) {
-            var mensaje = new { peticion.Mensaje };
-            return Ok(  mensaje );
-        }
-
-        return Ok( peticion );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
 
     [HttpGet("ListarUnidadMedida")]
     public async Task<IActionResult> ListarUnidadMedida() {
-        var peticion = await BLAdminU.ListarUnidadMedida();
-
-        return Ok( peticion );
+        return Ok( await BLAdminU.ListarUnidadMedida() );
     }
 
     [HttpGet("ListarFiltradaUnidadMedida/{descripcion}")]
     public async Task<IActionResult> ListarFiltradaUnidadMedida( string descripcion ) {
-        var peticion = await BLAdminU.ListarFiltrada( descripcion );
-
-        return Ok( peticion );
+        return Ok( await BLAdminU.ListarFiltrada( descripcion ) );
     }
     #endregion
 }
