@@ -1,0 +1,20 @@
+using Microsoft.AspNetCore.Mvc;
+using Unach.Inventario.API.Model.Request;
+using Unach.Inventario.API.BL.Empresas;
+
+namespace Unach.Inventario.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class EmpresaController : ControllerBase {
+    #region "Propiedades"
+    AdministracionEmpresas BLMarcaAdmin = new AdministracionEmpresas(); 
+    #endregion
+
+    #region  "Metodos"
+    [HttpGet("ListarEmpresas")]
+    public async Task<IActionResult> ListarEmpresas() {
+        return Ok( await BLMarcaAdmin.ListarEmpresas() );
+    }
+    #endregion
+}
