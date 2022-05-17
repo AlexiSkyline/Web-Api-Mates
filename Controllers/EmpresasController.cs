@@ -34,5 +34,10 @@ public class EmpresaController : ControllerBase {
     public async Task<IActionResult> ListarEmpresas() {
         return Ok( await BLEmpresaAdmin.ListarEmpresas() );
     }
+
+    [HttpGet("ListarFiltradaEmpresas/{nombre}")]
+    public async Task<IActionResult> ListarFiltradaEmpresas( string nombre ) {
+        return Ok( await BLEmpresaAdmin.ListarFiltradaEmpresas( nombre ) );
+    }
     #endregion
 }
