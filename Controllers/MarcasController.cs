@@ -29,5 +29,15 @@ public class MarcasController : ControllerBase {
         var peticion = await BLMarcaAdmin.EliminarMarcas( id );
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
+
+    [HttpGet("ListarMarcas")]
+    public async Task<IActionResult> ListarMarcas() {
+        return Ok( await BLMarcaAdmin.ListarMarcas() );
+    }
+
+    [HttpGet("ListarFiltradaMarcas/{descripcion}")]
+    public async Task<IActionResult> ListarFiltradaMarcas( string descripcion ) {
+        return Ok( await BLMarcaAdmin.ListarFiltradaMarcas( descripcion ) );
+    }
     #endregion
 }

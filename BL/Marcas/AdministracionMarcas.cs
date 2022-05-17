@@ -158,4 +158,97 @@ public class AdministracionMarcas {
 
         return resultado;
     }
+
+    public async Task<List<MarcasResponse>> ListarMarcas() {
+        List<MarcasResponse> resultado = new List<MarcasResponse>();
+
+        using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+            conexion.Open();
+
+            var comando = new SqlCommand {
+                Connection = conexion,
+                CommandText = "[dbo].[AdminMarcas]",
+                CommandType = CommandType.StoredProcedure
+            };
+            
+            comando.Parameters.AddWithValue( "@Opcion", "Listar" );
+
+            SqlParameter exito = new SqlParameter();
+            exito.ParameterName = "@Exito";
+            exito.SqlDbType = System.Data.SqlDbType.Bit;
+            exito.Direction = System.Data.ParameterDirection.Output;
+
+            comando.Parameters.Add( exito );
+
+            SqlParameter mensaje = new SqlParameter();
+            mensaje.ParameterName = "@Mensaje";
+            mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+            mensaje.Direction = System.Data.ParameterDirection.Output;
+            mensaje.Size = 4000;
+
+            comando.Parameters.Add( mensaje );
+
+            var lectura = await comando.ExecuteReaderAsync();
+
+            while( lectura.Read() ) {
+                resultado.Add( new(){
+                    Id = lectura.GetGuid( "Id" ),
+                    Descripcion = lectura.GetString( "Descripcion" ),
+                    Mensaje = "Listado exitoso",
+                    Exito = true
+                });
+            }
+
+            conexion.Close();
+        }
+
+        return resultado;
+    }
+
+    public async Task<List<MarcasResponse>> ListarFiltradaMarcas( string descripcion ) {
+        List<MarcasResponse> resultado = new List<MarcasResponse>();
+
+        using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+            conexion.Open();
+
+            var comando = new SqlCommand {
+                Connection = conexion,
+                CommandText = "[dbo].[AdminMarcas]",
+                CommandType = CommandType.StoredProcedure
+            };
+            
+            comando.Parameters.AddWithValue( "@Opcion", "ListaFiltrada" );
+            comando.Parameters.AddWithValue( "@Descripcion", descripcion );
+
+            SqlParameter exito = new SqlParameter();
+            exito.ParameterName = "@Exito";
+            exito.SqlDbType = System.Data.SqlDbType.Bit;
+            exito.Direction = System.Data.ParameterDirection.Output;
+
+            comando.Parameters.Add( exito );
+
+            SqlParameter mensaje = new SqlParameter();
+            mensaje.ParameterName = "@Mensaje";
+            mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+            mensaje.Direction = System.Data.ParameterDirection.Output;
+            mensaje.Size = 4000;
+
+            comando.Parameters.Add( mensaje );
+
+            var lectura = await comando.ExecuteReaderAsync();
+
+            while( lectura.Read() ) {
+                resultado.Add( new(){
+                    Id = lectura.GetGuid( "Id" ),
+                    Descripcion = lectura.GetString( "Descripcion" ),
+                    Mensaje = "Listado filtrado exitoso",
+                    Exito = true
+                });
+            }
+
+            conexion.Close();
+        }
+
+        return resultado;
+    }
 }
