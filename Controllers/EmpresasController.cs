@@ -18,6 +18,12 @@ public class EmpresaController : ControllerBase {
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
 
+    [HttpPut("ActualizarEmpresa/{id}")]
+    public async Task<IActionResult> ActualizarEmpresa( Guid id, EmpresaRequest empresa ) {
+        var peticion = await BLEmpresaAdmin.ActualizarEmpresa( id, empresa );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
+
     [HttpGet("ListarEmpresas")]
     public async Task<IActionResult> ListarEmpresas() {
         return Ok( await BLEmpresaAdmin.ListarEmpresas() );
