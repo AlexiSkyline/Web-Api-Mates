@@ -3,253 +3,251 @@ using Microsoft.Data.SqlClient;
 using Unach.Inventario.API.Helpers;
 using Unach.Inventario.API.Model.Request;
 using Unach.Inventario.API.Model.Response;
-using Unach.Inventario.API.Model;
 
-namespace Unach.Inventario.API.BL.UnidadesMedidas {
-    public class AdministracionUnidadMedida {
-        public async Task<UnidadMedidaResponse> AgregarUnidadMedida( UnidadMedidaRequest unidadMedidaRequest ) {
-            UnidadMedidaResponse resultado = new UnidadMedidaResponse();
+namespace Unach.Inventario.API.BL.UnidadesMedidas;
+public class AdministracionUnidadMedida {
+    public async Task<UnidadMedidaResponse> AgregarUnidadMedida( UnidadMedidaRequest unidadMedidaRequest ) {
+        UnidadMedidaResponse resultado = new UnidadMedidaResponse();
 
-            if( unidadMedidaRequest.Descripcion != null ) {
-                using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
-                    conexion.Open();
+        if( unidadMedidaRequest.Descripcion != null ) {
+            using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+                conexion.Open();
 
-                    var comando = new SqlCommand {
-                        Connection  = conexion,
-                        CommandText = "[dbo].[AdministracionUnidadesMedidas]",
-                        CommandType = CommandType.StoredProcedure
-                    };
-                    
-                    comando.Parameters.AddWithValue( "@Id", unidadMedidaRequest.Id );
-                    comando.Parameters.AddWithValue( "@Descripcion", unidadMedidaRequest.Descripcion );
-                    comando.Parameters.AddWithValue( "@Opcion", "Insertar" );
+                var comando = new SqlCommand {
+                    Connection  = conexion,
+                    CommandText = "[dbo].[AdministracionUnidadesMedidas]",
+                    CommandType = CommandType.StoredProcedure
+                };
+                
+                comando.Parameters.AddWithValue( "@Id", unidadMedidaRequest.Id );
+                comando.Parameters.AddWithValue( "@Descripcion", unidadMedidaRequest.Descripcion );
+                comando.Parameters.AddWithValue( "@Opcion", "Insertar" );
 
-                    SqlParameter exito  = new SqlParameter();
-                    exito.ParameterName = "@Exito";
-                    exito.SqlDbType     = System.Data.SqlDbType.Bit;
-                    exito.Direction     = System.Data.ParameterDirection.Output;
+                SqlParameter exito  = new SqlParameter();
+                exito.ParameterName = "@Exito";
+                exito.SqlDbType = System.Data.SqlDbType.Bit;
+                exito.Direction = System.Data.ParameterDirection.Output;
 
-                    comando.Parameters.Add( exito );
+                comando.Parameters.Add( exito );
 
-                    SqlParameter mensaje  = new SqlParameter();
-                    mensaje.ParameterName = "@Mensaje";
-                    mensaje.SqlDbType     = System.Data.SqlDbType.VarChar;
-                    mensaje.Direction     = System.Data.ParameterDirection.Output;
-                    mensaje.Size          = 4000;
+                SqlParameter mensaje  = new SqlParameter();
+                mensaje.ParameterName = "@Mensaje";
+                mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+                mensaje.Direction = System.Data.ParameterDirection.Output;
+                mensaje.Size = 4000;
 
-                    comando.Parameters.Add( mensaje );
+                comando.Parameters.Add( mensaje );
 
-                    var lectura = await comando.ExecuteReaderAsync();
+                var lectura = await comando.ExecuteReaderAsync();
 
-                    while( lectura.Read() ) {
-                        resultado.Id          = lectura.GetGuid( "Id" );  
-                        resultado.Descripcion = lectura.GetString( "Descripcion" );                
-                    }
-
-                    conexion.Close();
-                    resultado.Exito   = (bool) exito.Value; 
-                    resultado.Mensaje = (string) mensaje.Value; 
+                while( lectura.Read() ) {
+                    resultado.Id = lectura.GetGuid( "Id" );  
+                    resultado.Descripcion = lectura.GetString( "Descripcion" );                
                 }
-            } else {
-                resultado.Exito   = false;
-                resultado.Mensaje = "Ingresar la Descripción de la Unidad de Medida";
-            }
 
-            return resultado;
+                conexion.Close();
+                resultado.Exito = (bool) exito.Value; 
+                resultado.Mensaje = (string) mensaje.Value; 
+            }
+        } else {
+            resultado.Exito = false;
+            resultado.Mensaje = "Ingresar la Descripción de la Unidad de Medida";
         }
 
-        public async Task<UnidadMedidaResponse> ActualizarUnidadMedida( Guid? id, UnidadMedidaRequest body ) {
-            UnidadMedidaResponse resultado = new UnidadMedidaResponse();
+        return resultado;
+    }
 
-            if( id != null && body.Descripcion != null ) {
-                using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
-                    conexion.Open();
+    public async Task<UnidadMedidaResponse> ActualizarUnidadMedida( Guid? id, UnidadMedidaRequest body ) {
+        UnidadMedidaResponse resultado = new UnidadMedidaResponse();
 
-                    var comando = new SqlCommand {
-                        Connection  = conexion,
-                        CommandText = "[dbo].[AdministracionUnidadesMedidas]",
-                        CommandType = CommandType.StoredProcedure
-                    };
-                    
-                    comando.Parameters.AddWithValue( "@Id", id );
-                    comando.Parameters.AddWithValue( "@Descripcion", body.Descripcion );
-                    comando.Parameters.AddWithValue( "@Opcion", "Actualizar" );
+        if( id != null && body.Descripcion != null ) {
+            using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+                conexion.Open();
 
-                    SqlParameter exito  = new SqlParameter();
-                    exito.ParameterName = "@Exito";
-                    exito.SqlDbType     = System.Data.SqlDbType.Bit;
-                    exito.Direction     = System.Data.ParameterDirection.Output;
+                var comando = new SqlCommand {
+                    Connection = conexion,
+                    CommandText = "[dbo].[AdministracionUnidadesMedidas]",
+                    CommandType = CommandType.StoredProcedure
+                };
+                
+                comando.Parameters.AddWithValue( "@Id", id );
+                comando.Parameters.AddWithValue( "@Descripcion", body.Descripcion );
+                comando.Parameters.AddWithValue( "@Opcion", "Actualizar" );
 
-                    comando.Parameters.Add( exito );
+                SqlParameter exito  = new SqlParameter();
+                exito.ParameterName = "@Exito";
+                exito.SqlDbType = System.Data.SqlDbType.Bit;
+                exito.Direction = System.Data.ParameterDirection.Output;
 
-                    SqlParameter mensaje  = new SqlParameter();
-                    mensaje.ParameterName = "@Mensaje";
-                    mensaje.SqlDbType     = System.Data.SqlDbType.VarChar;
-                    mensaje.Direction     = System.Data.ParameterDirection.Output;
-                    mensaje.Size          = 4000;
+                comando.Parameters.Add( exito );
 
-                    comando.Parameters.Add( mensaje );
+                SqlParameter mensaje  = new SqlParameter();
+                mensaje.ParameterName = "@Mensaje";
+                mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+                mensaje.Direction = System.Data.ParameterDirection.Output;
+                mensaje.Size = 4000;
 
-                    var lectura = await comando.ExecuteReaderAsync();
+                comando.Parameters.Add( mensaje );
 
-                    while( lectura.Read() ) {
-                        resultado.Id          = lectura.GetGuid( "Id" );  
-                        resultado.Descripcion = lectura.GetString( "Descripcion" );                
-                    }
+                var lectura = await comando.ExecuteReaderAsync();
 
-                    conexion.Close();
-                    resultado.Exito   = (bool) exito.Value; 
-                    resultado.Mensaje = (string) mensaje.Value; 
+                while( lectura.Read() ) {
+                    resultado.Id = lectura.GetGuid( "Id" );  
+                    resultado.Descripcion = lectura.GetString( "Descripcion" );                
                 }
-            } else {
-                resultado.Exito   = false;
-                resultado.Mensaje = "El ID y la Descripción son obligatorios";
-            }
 
-            return resultado;
+                conexion.Close();
+                resultado.Exito = (bool) exito.Value; 
+                resultado.Mensaje = (string) mensaje.Value; 
+            }
+        } else {
+            resultado.Exito = false;
+            resultado.Mensaje = "El ID y la Descripción son obligatorios";
         }
 
-        public async Task<UnidadMedidaResponse> EliminarUnidadMedida( Guid? id ) {
-            UnidadMedidaResponse resultado = new UnidadMedidaResponse();
+        return resultado;
+    }
 
-            if( id != null ) {
-                using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
-                    conexion.Open();
+    public async Task<UnidadMedidaResponse> EliminarUnidadMedida( Guid? id ) {
+        UnidadMedidaResponse resultado = new UnidadMedidaResponse();
 
-                    var comando = new SqlCommand {
-                        Connection  = conexion,
-                        CommandText = "[dbo].[AdministracionUnidadesMedidas]",
-                        CommandType = CommandType.StoredProcedure
-                    };
-                    
-                    comando.Parameters.AddWithValue( "@Id", id );
-                    comando.Parameters.AddWithValue( "@Opcion", "Eliminar" );
+        if( id != null ) {
+            using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+                conexion.Open();
 
-                    SqlParameter exito  = new SqlParameter();
-                    exito.ParameterName = "@Exito";
-                    exito.SqlDbType     = System.Data.SqlDbType.Bit;
-                    exito.Direction     = System.Data.ParameterDirection.Output;
+                var comando = new SqlCommand {
+                    Connection = conexion,
+                    CommandText = "[dbo].[AdministracionUnidadesMedidas]",
+                    CommandType = CommandType.StoredProcedure
+                };
+                
+                comando.Parameters.AddWithValue( "@Id", id );
+                comando.Parameters.AddWithValue( "@Opcion", "Eliminar" );
 
-                    comando.Parameters.Add( exito );
+                SqlParameter exito = new SqlParameter();
+                exito.ParameterName = "@Exito";
+                exito.SqlDbType = System.Data.SqlDbType.Bit;
+                exito.Direction = System.Data.ParameterDirection.Output;
 
-                    SqlParameter mensaje  = new SqlParameter();
-                    mensaje.ParameterName = "@Mensaje";
-                    mensaje.SqlDbType     = System.Data.SqlDbType.VarChar;
-                    mensaje.Direction     = System.Data.ParameterDirection.Output;
-                    mensaje.Size          = 4000;
+                comando.Parameters.Add( exito );
 
-                    comando.Parameters.Add( mensaje );
+                SqlParameter mensaje = new SqlParameter();
+                mensaje.ParameterName = "@Mensaje";
+                mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+                mensaje.Direction = System.Data.ParameterDirection.Output;
+                mensaje.Size = 4000;
 
-                    var lectura = await comando.ExecuteReaderAsync();
+                comando.Parameters.Add( mensaje );
 
-                    while( lectura.Read() ) {
-                        resultado.Id          = lectura.GetGuid( "Id" );  
-                        resultado.Descripcion = lectura.GetString( "Descripcion" );                
-                    }
+                var lectura = await comando.ExecuteReaderAsync();
 
-                    conexion.Close();
-                    resultado.Exito   = (bool) exito.Value; 
-                    resultado.Mensaje = (string) mensaje.Value; 
+                while( lectura.Read() ) {
+                    resultado.Id = lectura.GetGuid( "Id" );  
+                    resultado.Descripcion = lectura.GetString( "Descripcion" );                
                 }
-            } else {
-                resultado.Exito   = false;
-                resultado.Mensaje = "El ID es obligatorio";
+
+                conexion.Close();
+                resultado.Exito = (bool) exito.Value; 
+                resultado.Mensaje = (string) mensaje.Value; 
+            }
+        } else {
+            resultado.Exito = false;
+            resultado.Mensaje = "El ID es obligatorio";
+        }
+
+        return resultado;
+    }
+
+    public async Task<List<UnidadMedidaResponse>> ListarUnidadMedida() {
+        List<UnidadMedidaResponse> resultado = new List<UnidadMedidaResponse>();
+
+        using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+            conexion.Open();
+
+            var comando = new SqlCommand {
+                Connection = conexion,
+                CommandText = "[dbo].[AdministracionUnidadesMedidas]",
+                CommandType = CommandType.StoredProcedure
+            };
+            
+            comando.Parameters.AddWithValue( "@Opcion", "Listar" );
+
+            SqlParameter exito = new SqlParameter();
+            exito.ParameterName = "@Exito";
+            exito.SqlDbType = System.Data.SqlDbType.Bit;
+            exito.Direction = System.Data.ParameterDirection.Output;
+
+            comando.Parameters.Add( exito );
+
+            SqlParameter mensaje = new SqlParameter();
+            mensaje.ParameterName = "@Mensaje";
+            mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+            mensaje.Direction = System.Data.ParameterDirection.Output;
+            mensaje.Size = 4000;
+
+            comando.Parameters.Add( mensaje );
+
+            var lectura = await comando.ExecuteReaderAsync();
+
+            while( lectura.Read() ) {
+                resultado.Add( new(){
+                    Id = lectura.GetGuid( "Id" ),
+                    Descripcion = lectura.GetString( "Descripcion" ),
+                    Mensaje = "Listado exitoso",
+                    Exito = true
+                });
             }
 
-            return resultado;
+            conexion.Close();
         }
+
+        return resultado;
+    }
     
-        public async Task<List<UnidadMedidaResponse>> ListarUnidadMedida() {
-            List<UnidadMedidaResponse> resultado = new List<UnidadMedidaResponse>();
+    public async Task<List<UnidadMedidaResponse>> ListarFiltrada( string descripcion ) {
+        List<UnidadMedidaResponse> resultado = new List<UnidadMedidaResponse>();
 
-            using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
-                conexion.Open();
+        using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+            conexion.Open();
 
-                var comando = new SqlCommand {
-                    Connection  = conexion,
-                    CommandText = "[dbo].[AdministracionUnidadesMedidas]",
-                    CommandType = CommandType.StoredProcedure
-                };
-                
-                comando.Parameters.AddWithValue( "@Opcion", "Listar" );
+            var comando = new SqlCommand {
+                Connection = conexion,
+                CommandText = "[dbo].[AdministracionUnidadesMedidas]",
+                CommandType = CommandType.StoredProcedure
+            };
+            
+            comando.Parameters.AddWithValue( "@Opcion", "ListaFiltrada" );
+            comando.Parameters.AddWithValue( "@Descripcion", descripcion );
 
-                SqlParameter exito  = new SqlParameter();
-                exito.ParameterName = "@Exito";
-                exito.SqlDbType     = System.Data.SqlDbType.Bit;
-                exito.Direction     = System.Data.ParameterDirection.Output;
+            SqlParameter exito = new SqlParameter();
+            exito.ParameterName = "@Exito";
+            exito.SqlDbType = System.Data.SqlDbType.Bit;
+            exito.Direction = System.Data.ParameterDirection.Output;
 
-                comando.Parameters.Add( exito );
+            comando.Parameters.Add( exito );
 
-                SqlParameter mensaje  = new SqlParameter();
-                mensaje.ParameterName = "@Mensaje";
-                mensaje.SqlDbType     = System.Data.SqlDbType.VarChar;
-                mensaje.Direction     = System.Data.ParameterDirection.Output;
-                mensaje.Size          = 4000;
+            SqlParameter mensaje = new SqlParameter();
+            mensaje.ParameterName = "@Mensaje";
+            mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+            mensaje.Direction = System.Data.ParameterDirection.Output;
+            mensaje.Size = 4000;
 
-                comando.Parameters.Add( mensaje );
+            comando.Parameters.Add( mensaje );
 
-                var lectura = await comando.ExecuteReaderAsync();
+            var lectura = await comando.ExecuteReaderAsync();
 
-                while( lectura.Read() ) {
-                    resultado.Add( new(){
-                        Id          = lectura.GetGuid( "Id" ),
-                        Descripcion = lectura.GetString( "Descripcion" ),
-                        Mensaje     = "Listado exitoso",
-                        Exito       = true
-                    });
-                }
-
-                conexion.Close();
+            while( lectura.Read() ) {
+                resultado.Add( new(){
+                    Id = lectura.GetGuid( "Id" ),
+                    Descripcion = lectura.GetString( "Descripcion" ),
+                    Mensaje = "Listado filtrado exitoso",
+                    Exito = true
+                });
             }
 
-            return resultado;
+            conexion.Close();
         }
-        
-        public async Task<List<UnidadMedidaResponse>> ListarFiltrada( string descripcion ) {
-            List<UnidadMedidaResponse> resultado = new List<UnidadMedidaResponse>();
 
-            using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
-                conexion.Open();
-
-                var comando = new SqlCommand {
-                    Connection  = conexion,
-                    CommandText = "[dbo].[AdministracionUnidadesMedidas]",
-                    CommandType = CommandType.StoredProcedure
-                };
-                
-                comando.Parameters.AddWithValue( "@Opcion", "ListaFiltrada" );
-                comando.Parameters.AddWithValue( "@Descripcion", descripcion );
-
-                SqlParameter exito  = new SqlParameter();
-                exito.ParameterName = "@Exito";
-                exito.SqlDbType     = System.Data.SqlDbType.Bit;
-                exito.Direction     = System.Data.ParameterDirection.Output;
-
-                comando.Parameters.Add( exito );
-
-                SqlParameter mensaje  = new SqlParameter();
-                mensaje.ParameterName = "@Mensaje";
-                mensaje.SqlDbType     = System.Data.SqlDbType.VarChar;
-                mensaje.Direction     = System.Data.ParameterDirection.Output;
-                mensaje.Size          = 4000;
-
-                comando.Parameters.Add( mensaje );
-
-                var lectura = await comando.ExecuteReaderAsync();
-
-                while( lectura.Read() ) {
-                    resultado.Add( new(){
-                        Id          = lectura.GetGuid( "Id" ),
-                        Descripcion = lectura.GetString( "Descripcion" ),
-                        Mensaje     = "Listado filtrado exitoso",
-                        Exito       = true
-                    });
-                }
-
-                conexion.Close();
-            }
-
-            return resultado;
-        }
+        return resultado;
     }
 }
