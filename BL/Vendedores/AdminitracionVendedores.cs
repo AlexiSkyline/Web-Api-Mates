@@ -77,9 +77,9 @@ public class AdministracionVendedores {
     public async Task<VendedorResponse> ActualizarVendedor( Guid? id, VendedorRequest vendedorRequest ) {
         VendedorResponse resultado = new VendedorResponse();
 
-        if( vendedorRequest.Nombre != null && vendedorRequest.Apellidos != null && vendedorRequest.RFC != null && 
+        if( id != null && vendedorRequest.Nombre != null && vendedorRequest.Apellidos != null && vendedorRequest.RFC != null && 
             vendedorRequest.Direccion != null && vendedorRequest.Telefono != null && 
-            vendedorRequest.Correo != null && vendedorRequest.UserName != null )  {
+            vendedorRequest.Correo != null && vendedorRequest.UserName != null && vendedorRequest.IdDatosGenerales != null )  {
             using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
                 conexion.Open();
 

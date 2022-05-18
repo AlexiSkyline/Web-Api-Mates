@@ -18,11 +18,11 @@ public class ProveedoresController : ControllerBase {
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
 
-    // [HttpPut("ActualizarProveedor/{id}")]
-    // public async Task<IActionResult> ActualizarProveedor( Guid id, ProveedorRequest proveedor ) {
-    //     var peticion = await BLProveedorAdmin.ActualizarProveedor( id, proveedor );
-    //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
-    // }
+    [HttpPut("ActualizarProveedor/{id}")]
+    public async Task<IActionResult> ActualizarProveedor( Guid id, ProveedorRequest proveedor ) {
+        var peticion = await BLProveedorAdmin.ActualizarProveedor( id, proveedor );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
 
     // [HttpDelete("EliminarVendedor/{id}")]
     // public async Task<IActionResult> EliminarVendedor( Guid id ) {
