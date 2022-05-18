@@ -30,14 +30,14 @@ public class ClientesController : ControllerBase {
     //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     // }
 
-    // [HttpGet("ListarClientees")]
-    // public async Task<IActionResult> ListarClientees() {
-    //     return Ok( await BLClienteAdmin.ListarClientees() );
-    // }
+    [HttpGet("ListarClientes")]
+    public async Task<IActionResult> ListarClientes() {
+        return Ok( await BLClientesAdmin.ListarClientes() );
+    }
 
-    // [HttpGet("ListarFiltroClientees/{nombre}")]
-    // public async Task<IActionResult> ListarFiltroClientees( string nombre ) {
-    //     return Ok( await BLClienteAdmin.ListarFiltroClientees( nombre ) );
-    // }
+    [HttpGet("ListarFiltroClientes/{nombre}")]
+    public async Task<IActionResult> ListarFiltroClientes( string nombre ) {
+        return Ok( await BLClientesAdmin.ListarFiltroClientes( nombre ) );
+    }
     #endregion
 }
