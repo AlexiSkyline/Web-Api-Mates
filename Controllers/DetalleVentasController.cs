@@ -18,11 +18,11 @@ public class DetalleVentasController : ControllerBase {
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
 
-    // [HttpPut("ActualizarVentas/{id}")]
-    // public async Task<IActionResult> ActualizarVentas( Guid id, VentasRequest venta ) {
-    //     var peticion = await BLVentasAdmin.ActualizarVentas( id, venta );
-    //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
-    // }
+    [HttpPut("ActualizarDetalleVentas/{id}")]
+    public async Task<IActionResult> ActualizarDetalleVentas( Guid id, DetalleVentasRequest detalleVenta ) {
+        var peticion = await BLDetalleVentasAdmin.ActualizarDetalleVentas( id, detalleVenta );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
 
     [HttpDelete("EliminarDetalleVentas/{id}")]
     public async Task<IActionResult> EliminarDetalleVentas( Guid id ) {
