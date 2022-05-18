@@ -73,7 +73,7 @@ public class AdministracionClientes {
      public async Task<ClienteResponse> ActualizarCliente( Guid? id, ClienteRequest clienteRequest ) {
         ClienteResponse resultado = new ClienteResponse();
 
-        if( clienteRequest.Nombre != null && clienteRequest.Apellidos != null && clienteRequest.RFC != null && 
+        if( id != null && clienteRequest.Nombre != null && clienteRequest.Apellidos != null && clienteRequest.RFC != null && 
             clienteRequest.Direccion != null && clienteRequest.Telefono != null && 
             clienteRequest.Correo != null && id != null && clienteRequest.IdDatosGenerales != null )  {
             using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {

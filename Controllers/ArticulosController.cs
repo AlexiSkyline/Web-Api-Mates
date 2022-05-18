@@ -18,11 +18,11 @@ public class ArticulosController : ControllerBase {
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
 
-    // [HttpPut("ActualizarArticulo/{id}")]
-    // public async Task<IActionResult> ActualizarArticulo( Guid id, ArticuloRequest Articulo ) {
-    //     var peticion = await BLArticulosAdmin.ActualizarArticulo( id, Articulo );
-    //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
-    // }
+    [HttpPut("ActualizarArticulo/{id}")]
+    public async Task<IActionResult> ActualizarArticulo( Guid id, ArticulosRequest Articulo ) {
+        var peticion = await BLArticulosAdmin.ActualizarArticulo( id, Articulo );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
 
     [HttpDelete("EliminarArticulo/{id}")]
     public async Task<IActionResult> EliminarArticulo( Guid id ) {

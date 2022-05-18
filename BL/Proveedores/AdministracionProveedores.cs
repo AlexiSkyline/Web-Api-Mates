@@ -73,7 +73,7 @@ public class AdministracionProveedores {
     public async Task<ProveedorResponse> ActualizarProveedor( Guid? id, ProveedorRequest ProveedorRequest ) {
         ProveedorResponse resultado = new ProveedorResponse();
 
-        if( ProveedorRequest.Nombre != null && ProveedorRequest.Apellidos != null && ProveedorRequest.RFC != null && 
+        if( id != null && ProveedorRequest.Nombre != null && ProveedorRequest.Apellidos != null && ProveedorRequest.RFC != null && 
             ProveedorRequest.Direccion != null && ProveedorRequest.Telefono != null && 
             ProveedorRequest.Correo != null && id != null && ProveedorRequest.IdDatosGenerales != null )  {
             using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
