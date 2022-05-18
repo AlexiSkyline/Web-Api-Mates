@@ -18,11 +18,11 @@ public class ClientesController : ControllerBase {
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
 
-    // [HttpPut("ActualizarCliente/{id}")]
-    // public async Task<IActionResult> ActualizarCliente( Guid id, ClienteRequest Cliente ) {
-    //     var peticion = await BLClienteAdmin.ActualizarCliente( id, Cliente );
-    //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
-    // }
+    [HttpPut("ActualizarCliente/{id}")]
+    public async Task<IActionResult> ActualizarCliente( Guid id, ClienteRequest Cliente ) {
+        var peticion = await BLClientesAdmin.ActualizarCliente( id, Cliente );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
 
     [HttpDelete("EliminarCliente/{id}")]
     public async Task<IActionResult> EliminarCliente( Guid id ) {
