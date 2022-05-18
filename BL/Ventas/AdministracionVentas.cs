@@ -129,4 +129,66 @@ public class AdministracionVentas {
 
         return resultado;
     }
+
+    public async Task<List<VentasResponse>> ListarFiltroVentas( int? folio ) {
+        List<VentasResponse> resultado = new List<VentasResponse>();
+
+        if( folio != null ) {
+            using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+                conexion.Open();
+
+                var comando = new SqlCommand {
+                    Connection = conexion,
+                    CommandText = "[dbo].[AdminVentas]",
+                    CommandType = CommandType.StoredProcedure
+                };
+                
+                comando.Parameters.AddWithValue( "@Opcion", "ListaFiltrada" );
+                comando.Parameters.AddWithValue( "@Folio", folio );
+
+                SqlParameter exito = new SqlParameter();
+                exito.ParameterName = "@Exito";
+                exito.SqlDbType = System.Data.SqlDbType.Bit;
+                exito.Direction = System.Data.ParameterDirection.Output;
+
+                comando.Parameters.Add( exito );
+
+                SqlParameter mensaje = new SqlParameter();
+                mensaje.ParameterName = "@Mensaje";
+                mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+                mensaje.Direction = System.Data.ParameterDirection.Output;
+                mensaje.Size = 4000;
+
+                comando.Parameters.Add( mensaje );
+
+                var lectura = await comando.ExecuteReaderAsync();
+
+                while( lectura.Read() ) {
+                    resultado.Add( new(){
+                        Id = lectura.GetGuid( "Id" ),
+                        Fecha = lectura.GetDateTime( "Fecha" ),   
+                        IdVendedor = lectura.GetGuid( "IdVendedor" ),  
+                        IdCliente = lectura.GetGuid( "IdCliente" ),
+                        Folio = lectura.GetInt32( "Folio" ),
+                        IdEmpresa = lectura.GetGuid( "IdEmpresa" ),
+                        Total = lectura.GetDecimal( "Total" ),
+                        Iva = lectura.GetDecimal( "Iva" ),
+                        SubTotal = lectura.GetDecimal( "SubTotal" ),
+                        PagoCon = lectura.GetString( "PagoCon" ),
+                        Mensaje = "Listado con filtrado exitoso",
+                        Exito = true
+                    });
+                }
+
+                conexion.Close();
+            }
+        } else {
+            resultado.Add( new VentasResponse {
+                Mensaje = "El Folio es requerido",
+                Exito = false
+            });
+        }
+
+        return resultado;
+    }
 }
