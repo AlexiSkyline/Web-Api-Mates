@@ -35,9 +35,9 @@ public class ArticulosController : ControllerBase {
         return Ok( await BLArticulosAdmin.ListarArticulos() );
     }
 
-    // [HttpGet("ListarFiltroArticulos/{nombre}")]
-    // public async Task<IActionResult> ListarFiltroArticulos( string nombre ) {
-    //     return Ok( await BLArticulosAdmin.ListarFiltroArticulos( nombre ) );
-    // }
+    [HttpGet("ListarFiltroArticulos/{nombre}")]
+    public async Task<IActionResult> ListarFiltroArticulos( string nombre ) {
+        return Ok( await BLArticulosAdmin.ListarFiltroArticulos( nombre ) );
+    }
     #endregion
 }

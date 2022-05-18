@@ -119,4 +119,63 @@ public class AdministracionArticulos {
 
         return resultado;
     }
+
+    public async Task<List<ArticulosResponse>> ListarFiltroArticulos( string nombre ) {
+        List<ArticulosResponse> resultado = new List<ArticulosResponse>();
+
+        if( nombre != "" ) {
+            using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+                conexion.Open();
+
+                var comando = new SqlCommand {
+                    Connection = conexion,
+                    CommandText = "[dbo].[AdminArticulos]",
+                    CommandType = CommandType.StoredProcedure
+                };
+                
+                comando.Parameters.AddWithValue( "@Opcion", "ListaFiltrada" );
+                comando.Parameters.AddWithValue( "@Nombre", nombre );
+
+                SqlParameter exito = new SqlParameter();
+                exito.ParameterName = "@Exito";
+                exito.SqlDbType = System.Data.SqlDbType.Bit;
+                exito.Direction = System.Data.ParameterDirection.Output;
+
+                comando.Parameters.Add( exito );
+
+                SqlParameter mensaje = new SqlParameter();
+                mensaje.ParameterName = "@Mensaje";
+                mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+                mensaje.Direction = System.Data.ParameterDirection.Output;
+                mensaje.Size = 4000;
+
+                comando.Parameters.Add( mensaje );
+
+                var lectura = await comando.ExecuteReaderAsync();
+
+                while( lectura.Read() ) {
+                    resultado.Add( new(){
+                        Id = lectura.GetGuid( "Id" ),        
+                        Nombre = lectura.GetString( "Nombre" ),  
+                        Descripcion = lectura.GetString( "Descripcion" ),  
+                        IdUnidadMedida = lectura.GetGuid( "IdUnidadMedida" ),  
+                        IdMarca = lectura.GetGuid( "IdMarca" ),  
+                        Stock = lectura.GetInt32( "Stock" ),  
+                        IdProveedor = lectura.GetGuid( "IdProveedor" ),  
+                        Mensaje = "Listado con filtro exitoso",
+                        Exito = true
+                    });
+                }
+
+                conexion.Close();
+            }
+        } else {
+            resultado.Add( new ArticulosResponse {
+                Mensaje = "El nombre es requerido",
+                Exito = false
+            });
+        }
+
+        return resultado;
+    }
 }
