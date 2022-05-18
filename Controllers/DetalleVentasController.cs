@@ -30,10 +30,10 @@ public class DetalleVentasController : ControllerBase {
     //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     // }
 
-    // [HttpGet("ListarVentas")]
-    // public async Task<IActionResult> ListarVentas() {
-    //     return Ok( await BLVentasAdmin.ListarVentas() );
-    // }
+    [HttpGet("ListarDetalleVentas")]
+    public async Task<IActionResult> ListarDetalleVentas() {
+        return Ok( await BLDetalleVentasAdmin.ListarDetalleVentas() );
+    }
 
     // [HttpGet("ListarFiltroVentas/{folio}")]
     // public async Task<IActionResult> ListarFiltroVentas( int folio ) {
