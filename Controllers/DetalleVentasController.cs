@@ -35,9 +35,9 @@ public class DetalleVentasController : ControllerBase {
         return Ok( await BLDetalleVentasAdmin.ListarDetalleVentas() );
     }
 
-    // [HttpGet("ListarFiltroVentas/{folio}")]
-    // public async Task<IActionResult> ListarFiltroVentas( int folio ) {
-    //     return Ok( await BLVentasAdmin.ListarFiltroVentas( folio ) );
-    // }
+    [HttpGet("ListarDetalleVentasPorId/{id}")]
+    public async Task<IActionResult> ListarDetalleVentasPorId( Guid id ) {
+        return Ok( await BLDetalleVentasAdmin.ListarDetalleVentasPorId( id ) );
+    }
     #endregion
 }

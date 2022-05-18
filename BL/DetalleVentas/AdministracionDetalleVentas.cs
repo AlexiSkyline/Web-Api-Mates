@@ -118,4 +118,62 @@ public class AdministracionDetalleVentas {
 
         return resultado;
     }
+
+    public async Task<List<DetalleVentasResponse>> ListarDetalleVentasPorId( Guid? id ) {
+        List<DetalleVentasResponse> resultado = new List<DetalleVentasResponse>();
+
+        if( id != null ) {
+            using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+                conexion.Open();
+
+                var comando = new SqlCommand {
+                    Connection = conexion,
+                    CommandText = "[dbo].[AdminDetalleVenta]",
+                    CommandType = CommandType.StoredProcedure
+                };
+                
+                comando.Parameters.AddWithValue( "@Opcion", "ListaFiltrada" );
+                comando.Parameters.AddWithValue( "@Id", id );
+
+                SqlParameter exito = new SqlParameter();
+                exito.ParameterName = "@Exito";
+                exito.SqlDbType = System.Data.SqlDbType.Bit;
+                exito.Direction = System.Data.ParameterDirection.Output;
+
+                comando.Parameters.Add( exito );
+
+                SqlParameter mensaje = new SqlParameter();
+                mensaje.ParameterName = "@Mensaje";
+                mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+                mensaje.Direction = System.Data.ParameterDirection.Output;
+                mensaje.Size = 4000;
+
+                comando.Parameters.Add( mensaje );
+
+                var lectura = await comando.ExecuteReaderAsync();
+
+                while( lectura.Read() ) {
+                    resultado.Add( new(){
+                         Id = lectura.GetGuid( "Id" ),
+                        IdVentas = lectura.GetGuid( "IdVentas" ),
+                        IdArticulo = lectura.GetGuid( "IdArticulo" ),
+                        Cantidad = lectura.GetInt32( "Cantidad" ),
+                        PrecioCompra = lectura.GetDecimal( "PrecioCompra" ),
+                        Importe = lectura.GetDecimal( "Importe" ),
+                        Mensaje = "Listado con filtrado exitoso",
+                        Exito = true
+                    });
+                }
+
+                conexion.Close();
+            }
+        } else {
+            resultado.Add( new DetalleVentasResponse {
+                Mensaje = "El Id es obligatorio",
+                Exito = false
+            });
+        }
+
+        return resultado;
+    }
 }
