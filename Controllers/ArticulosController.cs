@@ -24,11 +24,11 @@ public class ArticulosController : ControllerBase {
     //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     // }
 
-    // [HttpDelete("EliminarArticulo/{id}")]
-    // public async Task<IActionResult> EliminarArticulo( Guid id ) {
-    //     var peticion = await BLArticulosAdmin.EliminarArticulo( id );
-    //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
-    // }
+    [HttpDelete("EliminarArticulo/{id}")]
+    public async Task<IActionResult> EliminarArticulo( Guid id ) {
+        var peticion = await BLArticulosAdmin.EliminarArticulo( id );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
 
     [HttpGet("ListarArticulos")]
     public async Task<IActionResult> ListarArticulos() {

@@ -54,7 +54,6 @@ public class AdministracionArticulos {
                     resultado.IdMarca = lectura.GetGuid( "IdMarca" );  
                     resultado.Stock = lectura.GetInt32( "Stock" );  
                     resultado.IdProveedor = lectura.GetGuid( "IdProveedor" );  
-                    
                 }
 
                 conexion.Close();
@@ -64,6 +63,61 @@ public class AdministracionArticulos {
         } else {
             resultado.Exito = false;
             resultado.Mensaje = "Todos los campos son obligatorios";
+        }
+
+        return resultado;
+    }
+
+    public async Task<ArticulosResponse> EliminarArticulo( Guid? id ) {
+        ArticulosResponse resultado = new ArticulosResponse();
+
+        if( id != null ) {
+            using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+                conexion.Open();
+
+                var comando = new SqlCommand {
+                    Connection = conexion,
+                    CommandText = "[dbo].[AdminArticulos]",
+                    CommandType = CommandType.StoredProcedure
+                };
+                
+                comando.Parameters.AddWithValue( "@Id", id );
+                comando.Parameters.AddWithValue( "@Opcion", "Eliminar" );
+
+                SqlParameter exito = new SqlParameter();
+                exito.ParameterName = "@Exito";
+                exito.SqlDbType = System.Data.SqlDbType.Bit;
+                exito.Direction = System.Data.ParameterDirection.Output;
+
+                comando.Parameters.Add( exito );
+
+                SqlParameter mensaje = new SqlParameter();
+                mensaje.ParameterName = "@Mensaje";
+                mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+                mensaje.Direction = System.Data.ParameterDirection.Output;
+                mensaje.Size = 4000;
+
+                comando.Parameters.Add( mensaje );
+
+                var lectura = await comando.ExecuteReaderAsync();
+
+                while( lectura.Read() ) {
+                    resultado.Id = lectura.GetGuid( "Id" );  
+                    resultado.Nombre = lectura.GetString( "Nombre" );  
+                    resultado.Descripcion = lectura.GetString( "Descripcion" );  
+                    resultado.IdUnidadMedida = lectura.GetGuid( "IdUnidadMedida" );  
+                    resultado.IdMarca = lectura.GetGuid( "IdMarca" );  
+                    resultado.Stock = lectura.GetInt32( "Stock" );  
+                    resultado.IdProveedor = lectura.GetGuid( "IdProveedor" );         
+                }
+
+                conexion.Close();
+                resultado.Exito = (bool) exito.Value; 
+                resultado.Mensaje = (string) mensaje.Value; 
+            }
+        } else {
+            resultado.Exito = false;
+            resultado.Mensaje = "El ID es requerido";
         }
 
         return resultado;
