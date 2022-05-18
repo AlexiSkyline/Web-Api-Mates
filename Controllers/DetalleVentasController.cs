@@ -24,11 +24,11 @@ public class DetalleVentasController : ControllerBase {
     //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     // }
 
-    // [HttpDelete("EliminarVentas/{id}")]
-    // public async Task<IActionResult> EliminarVentas( Guid id ) {
-    //     var peticion = await BLVentasAdmin.EliminarVentas( id );
-    //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
-    // }
+    [HttpDelete("EliminarDetalleVentas/{id}")]
+    public async Task<IActionResult> EliminarDetalleVentas( Guid id ) {
+        var peticion = await BLDetalleVentasAdmin.EliminarDetalleVentas( id );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
 
     [HttpGet("ListarDetalleVentas")]
     public async Task<IActionResult> ListarDetalleVentas() {
