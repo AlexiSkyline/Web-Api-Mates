@@ -18,9 +18,9 @@ public class ProveedoresController : ControllerBase {
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
 
-    // [HttpPut("ActualizarVendedor/{id}")]
-    // public async Task<IActionResult> ActualizarVededor( Guid id, VendedorRequest Vededor ) {
-    //     var peticion = await BLProveedorAdmin.ActualizarVendedor( id, Vededor );
+    // [HttpPut("ActualizarProveedor/{id}")]
+    // public async Task<IActionResult> ActualizarProveedor( Guid id, ProveedorRequest proveedor ) {
+    //     var peticion = await BLProveedorAdmin.ActualizarProveedor( id, proveedor );
     //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     // }
 
@@ -30,14 +30,14 @@ public class ProveedoresController : ControllerBase {
     //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     // }
 
-    // [HttpGet("ListarProveedores")]
-    // public async Task<IActionResult> ListarProveedores() {
-    //     return Ok( await BLProveedorAdmin.ListarProveedores() );
-    // }
+    [HttpGet("ListarProveedores")]
+    public async Task<IActionResult> ListarProveedores() {
+        return Ok( await BLProveedorAdmin.ListarProveedores() );
+    }
 
-    // [HttpGet("ListarFiltroProveedores/{nombre}")]
-    // public async Task<IActionResult> ListarFiltroProveedores( string nombre ) {
-    //     return Ok( await BLProveedorAdmin.ListarFiltroProveedores( nombre ) );
-    // }
+    [HttpGet("ListarFiltroProveedores/{nombre}")]
+    public async Task<IActionResult> ListarFiltroProveedores( string nombre ) {
+        return Ok( await BLProveedorAdmin.ListarFiltroProveedores( nombre ) );
+    }
     #endregion
 }
