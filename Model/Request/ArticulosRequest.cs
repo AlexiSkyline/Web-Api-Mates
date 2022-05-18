@@ -1,2 +1,2 @@
 namespace Unach.Inventario.API.Model.Request;
-public class ArticulosReques: ArticulosBase {}
+public class ArticulosRequest: ArticulosBase {}
