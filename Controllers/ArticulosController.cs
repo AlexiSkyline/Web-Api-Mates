@@ -30,10 +30,10 @@ public class ArticulosController : ControllerBase {
     //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     // }
 
-    // [HttpGet("ListarArticulos")]
-    // public async Task<IActionResult> ListarArticulos() {
-    //     return Ok( await BLArticulosAdmin.ListarArticulos() );
-    // }
+    [HttpGet("ListarArticulos")]
+    public async Task<IActionResult> ListarArticulos() {
+        return Ok( await BLArticulosAdmin.ListarArticulos() );
+    }
 
     // [HttpGet("ListarFiltroArticulos/{nombre}")]
     // public async Task<IActionResult> ListarFiltroArticulos( string nombre ) {
