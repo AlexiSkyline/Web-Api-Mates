@@ -13,7 +13,7 @@ public class ProveedoresController : ControllerBase {
 
     #region  "Metodos"
     [HttpPost("InsertarProveedor")]
-    public async Task<IActionResult> InsertarVendedor( ProveedorRequest proveedor ) {
+    public async Task<IActionResult> InsertarProveedor( ProveedorRequest proveedor ) {
         var peticion = await BLProveedorAdmin.AgregarProveedor( proveedor );
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
@@ -24,11 +24,11 @@ public class ProveedoresController : ControllerBase {
         return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     }
 
-    // [HttpDelete("EliminarVendedor/{id}")]
-    // public async Task<IActionResult> EliminarVendedor( Guid id ) {
-    //     var peticion = await BLProveedorAdmin.EliminarVendedor( id );
-    //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
-    // }
+    [HttpDelete("EliminarProveedor/{id}")]
+    public async Task<IActionResult> EliminarProveedor( Guid id ) {
+        var peticion = await BLProveedorAdmin.EliminarProveedor( id );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
 
     [HttpGet("ListarProveedores")]
     public async Task<IActionResult> ListarProveedores() {
