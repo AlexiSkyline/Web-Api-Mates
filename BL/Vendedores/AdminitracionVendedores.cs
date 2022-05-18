@@ -251,6 +251,7 @@ public class AdministracionVendedores {
 
         return resultado;
     }
+    
     public async Task<List<VendedorResponse>> ListarFiltroVendedores( string nombre ) {
         List<VendedorResponse> resultado = new List<VendedorResponse>();
 
