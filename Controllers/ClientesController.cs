@@ -24,11 +24,11 @@ public class ClientesController : ControllerBase {
     //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
     // }
 
-    // [HttpDelete("EliminarCliente/{id}")]
-    // public async Task<IActionResult> EliminarCliente( Guid id ) {
-    //     var peticion = await BLClienteAdmin.EliminarCliente( id );
-    //     return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
-    // }
+    [HttpDelete("EliminarCliente/{id}")]
+    public async Task<IActionResult> EliminarCliente( Guid id ) {
+        var peticion = await BLClientesAdmin.EliminarCliente( id );
+        return peticion.Exito.Equals( false ) ? Ok( new{ mensaje = peticion.Mensaje } ) : Ok( peticion );
+    }
 
     [HttpGet("ListarClientes")]
     public async Task<IActionResult> ListarClientes() {
