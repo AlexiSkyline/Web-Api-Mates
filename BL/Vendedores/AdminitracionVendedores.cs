@@ -251,4 +251,65 @@ public class AdministracionVendedores {
 
         return resultado;
     }
+    public async Task<List<VendedorResponse>> ListarFiltroVendedores( string nombre ) {
+        List<VendedorResponse> resultado = new List<VendedorResponse>();
+
+        if( nombre != "" )
+        {
+            using( var conexion = new SqlConnection( ContextDB.CadenaConexion ) ) {
+                conexion.Open();
+
+                var comando = new SqlCommand {
+                    Connection = conexion,
+                    CommandText = "[dbo].[AdminVendedores]",
+                    CommandType = CommandType.StoredProcedure
+                };
+                
+                comando.Parameters.AddWithValue( "@Opcion", "ListaFiltrada" );
+                comando.Parameters.AddWithValue( "@Nombre", nombre );
+
+                SqlParameter exito = new SqlParameter();
+                exito.ParameterName = "@Exito";
+                exito.SqlDbType = System.Data.SqlDbType.Bit;
+                exito.Direction = System.Data.ParameterDirection.Output;
+
+                comando.Parameters.Add( exito );
+
+                SqlParameter mensaje = new SqlParameter();
+                mensaje.ParameterName = "@Mensaje";
+                mensaje.SqlDbType = System.Data.SqlDbType.VarChar;
+                mensaje.Direction = System.Data.ParameterDirection.Output;
+                mensaje.Size = 4000;
+
+                comando.Parameters.Add( mensaje );
+
+                var lectura = await comando.ExecuteReaderAsync();
+
+                while( lectura.Read() ) {
+                    resultado.Add( new(){
+                        Id = lectura.GetGuid( "Id" ),
+                        Nombre = lectura.GetString( "Nombre" ),
+                        Apellidos = lectura.GetString( "Apellidos" ),
+                        RFC = lectura.GetString( "RFC" ),
+                        Direccion = lectura.GetString( "Direccion" ),
+                        Correo = lectura.GetString( "Correo" ),
+                        Telefono = lectura.GetString( "Telefono" ),
+                        IdDatosGenerales = lectura.GetGuid( "IdDatosGenerales" ),
+                        UserName = lectura.GetString( "UserName" ),
+                        Mensaje = "Listado exitoso",
+                        Exito = true
+                    });
+                }
+
+                conexion.Close();
+            }
+        } else {
+            resultado.Add( new VendedorResponse {
+                Mensaje = "El nombre es requerido",
+                Exito = false
+            });
+        }
+
+        return resultado;
+    }
 }

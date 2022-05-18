@@ -34,5 +34,10 @@ public class VendedoresController : ControllerBase {
     public async Task<IActionResult> ListarVendedores() {
         return Ok( await BLVendedorAdmin.ListarVendedores() );
     }
+
+    [HttpGet("ListarFiltroVendedores/{nombre}")]
+    public async Task<IActionResult> ListarFiltroVendedores( string nombre ) {
+        return Ok( await BLVendedorAdmin.ListarFiltroVendedores( nombre ) );
+    }
     #endregion
 }
